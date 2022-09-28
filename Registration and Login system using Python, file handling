@@ -1,0 +1,103 @@
+import re
+def intro():
+  n=int(input('Enter 1 for register or 2 for Login :'))
+  if n==1:
+    reg()
+  elif n==2:
+    log()
+  else:
+    print('Error')
+    intro()
+intro()
+
+def reg():
+  a=input('Enter email id: ')
+  b=[]
+  for i in str(a):
+    b.append(i)
+  if b[0].isdigit():
+    print('Enter a valid email id')
+    intro()
+  else:
+    t=r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    if (re.fullmatch(t,a)):
+      s=input('Enter password: ')
+      if password(s)==1:
+          files=open('/content/sample_data/reg','w')
+          files.write(a+' '+s+'\n')
+          files.close()
+          intro()
+      else:
+        print('Enter a valid password')
+        intro()
+    else:
+      print('Enter a valid email id')
+      intro()
+
+def password(z):
+  c=[]
+  for j in str(z):
+    c.append(j)
+  if len(c)>5 and len(c)<16:
+    q=0
+    w=0
+    e=0
+    for k in range(0,len(c)):
+      if c[k].isdigit():
+        q=1
+      if c[k].isalpha():
+        w=1
+      if c[k].isalnum()==0:
+        e=1
+    if q==1 and w==1 and e==1:
+      return 1
+    else:
+      return 0
+
+def log():
+  myfile=open('/content/sample_data/reg','r+')
+  ab=input('Enter email id: ')
+  cd=input('Enter Password: ')
+  xy=[]
+  yz=[]
+  for x in myfile:
+    w,u=x.split(' ')
+    xy.append(w)
+    yz.append(u)
+    
+  data=dict(zip(xy,yz))
+  if ab in data:
+      if cd in data[ab]:
+        print('Login success')
+      else:
+        print('Password incorrect')
+        si=int(input('Enter 1 to go back to Registration page or 2 if you forget password: '))
+        if si==1:
+          reg()
+        elif si==2:
+          ka=int(input('Enter 1 for retrieving password or 2 to change password'))
+          if ka==1:
+            print('Your password is: ', data[ab])
+            intro()
+          elif ka==2:
+            qa=input('Enter new password: ')
+            if password(qa)==1:
+              for line in myfile:
+                myfile.write(line.replace(ab,ab+' '+qa))
+            else:
+              print('Enter a valid password')
+              intro()
+          else:
+            print('Error')
+            intro()
+        else:
+          print('Error')
+          intro()
+  else:
+      print('Email id not registerd')
+      vi=int(input('Enter 1 to register: '))
+      if vi==1:
+        reg()
+      else:
+        print('Error')
+        intro()
