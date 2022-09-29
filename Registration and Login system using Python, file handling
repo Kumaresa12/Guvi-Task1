@@ -1,0 +1,119 @@
+import re
+
+
+def reg():
+  a=input('Enter email id: ')
+  b=[]
+  for i in str(a):
+    b.append(i)
+  if b[0].isdigit():
+    print('Enter a valid email id')
+    intro()
+  else:
+    t=r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    if (re.fullmatch(t,a)):
+      s=input('Enter password: ')
+      if password(s)==1:
+          files=open('/content/sample_data/reg','a+')
+          files.write(a+' '+s+'\n')
+
+          files.close()
+          print('Account registered')
+          intro()
+      else:
+        print('Enter a valid password')
+        intro()
+    else:
+      print('Enter a valid email id')
+      intro()
+
+def password(z):
+  c=[]
+  for j in str(z):
+    c.append(j)
+  if len(c)>5 and len(c)<16:
+    q=0
+    w=0
+    p=0
+    e=0
+    for k in range(0,len(c)):
+      if c[k].isdigit():
+        q=1
+      if c[k].islower():
+        w=1
+      if c[k].isupper():
+        e=1
+      if c[k] in "!@#$%^&*()-+?_=,<>/":
+        p=1
+    if q==1 and w==1 and e==1 and p==1:
+      return 1
+    else:
+      return 0
+
+def log():
+  
+  ab=input('Enter email id: ')
+  cd=input('Enter Password: ')
+  data={}
+  with open("/content/sample_data/reg") as f:
+    for x in f:
+      (u,v)=x.split()
+      data[u]=v
+  
+   
+  
+  if ab in data:
+    if cd in data[ab]:
+        print('Login success')
+    else:
+      print('Password incorrect')
+      si=int(input('Enter 1 to go back to Registration page or 2 if you forget password: '))
+      if si==1:
+        reg()
+      elif si==2:
+        ka=int(input('Enter 1 for retrieving password or 2 to change password'))
+        if ka==1:
+          print('Your password is: ', data[ab])
+          intro()
+        elif ka==2:
+          qa=input('Enter new password: ')
+          if password(qa)==1:
+            fin=open('/content/sample_data/reg','r')
+            cn=fin.read()
+            fin.close()
+            sw=ab+' '+data[ab]
+            cf=ab+' '+qa
+            ain=cn.replace(sw,cf)
+            f1=open('/content/sample_data/reg','w')
+            f1.write(ain)
+            f1.close()
+            print('Password updated')
+            intro()
+          else:
+            print('Enter a valid password')
+            intro()
+        else:
+          print('Error')
+          intro()
+      else:
+          print('Error')
+          intro()
+  else:
+    print('Email id not registerd')
+    vi=int(input('Enter 1 to register: '))
+    if vi==1:
+      reg()
+    else:
+      print('Error')
+      intro()
+def intro():
+  n=int(input('Enter 1 for register or 2 for Login :'))
+  if n==1:
+    reg()
+  elif n==2:
+    log()
+  else:
+    print('Error')
+    intro()
+
+intro()
